@@ -14,6 +14,7 @@ const InputForm = ({
   defaultValue,
   style,
   readOnly,
+  className = "",
 }) => {
   return (
     <div className={clsx("flex flex-col h-[78px] gap-2", style)}>

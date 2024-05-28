@@ -2,14 +2,16 @@ const Order = require("../models/order");
 const User = require("../models/user");
 const Coupon = require("../models/coupon");
 const asyncHandler = require("express-async-handler");
-
+const { v4: uuidv4 } = require("uuid");
+const shortid = require("shortid");
 const createOrder = asyncHandler(async (req, res) => {
   const { _id } = req.user;
+  let idOrder = "DH" + shortid.generate();
   const { products, total, address, status } = req.body;
   if (address) {
     await User.findByIdAndUpdate(_id, { address, cart: [] });
   }
-  const data = { products, total, orderBy: _id };
+  const data = { products, total, orderBy: _id, idOrder };
   if (status) data.status = status;
   const rs = await Order.create(data);
   return res.status(200).json({
@@ -102,14 +104,16 @@ const getOrders = asyncHandler(async (req, res) => {
     formatedQueries.name = { $regex: queries.name, $options: "i" };
   if (req.query.q) {
     delete formatedQueries.q;
-    const objectId = Types.ObjectId(req.query.q);
+    // const objectId = Types.ObjectId(req.query.q);
     formatedQueries["$or"] = [
       { status: { $regex: req.query.q, $options: "i" } },
-      { _id: Types.ObjectId(req.query.q) },
+      { idOrder: { $regex: req.query.q, $options: "i" } },
+      { "orderBy.firstname": { $regex: req.query.q, $options: "i" } },
+      { "orderBy.lastname": { $regex: req.query.q, $options: "i" } },
     ];
   }
   const qr = { ...formatedQueries };
-  console.log(qr);
+  // console.log(qr);
   let queryCommand = Order.find(qr).populate("orderBy");
 
   // Sorting

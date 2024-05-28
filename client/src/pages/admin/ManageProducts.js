@@ -69,20 +69,21 @@ const ManageProducts = () => {
 
   const handleDeleteProduct = (pid) => {
     Swal.fire({
-      title: "Are you sure?",
-      text: "Are you sure remove this product",
+      title: "Xác nhận?",
+      text: "Bạn có chắc chắn muốn xóa sản phẩm này",
       icon: "warning",
       showCancelButton: true,
     }).then(async (rs) => {
       if (rs.isConfirmed) {
         const response = await apiDeleteProduct(pid);
-        if (response.success) toast.success(response.mes);
-        else toast.error(response.mes);
+        if (response.success) toast.success("Xóa thành công");
+        else toast.error("Thất bại");
         render();
       }
     });
   };
-
+  // console.log(customizeVarriant);
+  console.log(products);
   return (
     <div className="w-full flex flex-col gap-4 relative p-4">
       {editProduct && (
@@ -132,7 +133,7 @@ const ManageProducts = () => {
             <th className="text-center py-2">Sold</th>
             <th className="text-center py-2">Color</th>
             <th className="text-center py-2">Ratings</th>
-            <th className="text-center py-2">Varriants</th>
+            {/* <th className="text-center py-2">Varriants</th> */}
             <th className="text-center py-2">UpdatedAt</th>
             <th className="text-center py-2">Actions</th>
           </tr>
@@ -161,7 +162,7 @@ const ManageProducts = () => {
               <td className="text-center py-2">{el.sold}</td>
               <td className="text-center py-2">{el.color}</td>
               <td className="text-center py-2">{el.totalRatings}</td>
-              <td className="text-center py-2">{el?.varriants?.length || 0}</td>
+              {/* <td className="text-center py-2">{el?.varriants?.length || 0}</td> */}
               <td className="text-center py-2">
                 {moment(el.createdAt).format("DD/MM/YYYY")}
               </td>

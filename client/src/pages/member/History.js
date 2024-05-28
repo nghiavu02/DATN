@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { createSearchParams, useSearchParams } from "react-router-dom";
 import { statusOrders } from "ultils/contants";
+import { formatMoney } from "ultils/helpers";
 
 const History = ({ navigate, location }) => {
   const [orders, setOrders] = useState(null);
@@ -35,10 +36,17 @@ const History = ({ navigate, location }) => {
   }, [params]);
 
   const handleSearchStatus = ({ value }) => {
-    navigate({
-      pathname: location.pathname,
-      search: createSearchParams({ status: value }).toString(),
-    });
+    if (value === "All") {
+      navigate({
+        pathname: location.pathname,
+        search: createSearchParams({}).toString(),
+      });
+    } else {
+      navigate({
+        pathname: location.pathname,
+        search: createSearchParams({ status: value }).toString(),
+      });
+    }
   };
 
   return (
@@ -49,15 +57,15 @@ const History = ({ navigate, location }) => {
       <div className="flex w-full justify-end items-center px-4">
         <form className="w-[45%] grid grid-cols-2 gap-4">
           <div className="col-span-1">
-            <InputForm
+            {/* <InputForm
               id="q"
               register={register}
               errors={errors}
               fullWidth
               placeholder="Search order by status,..."
-            />
+            /> */}
           </div>
-          <div className="col-span-1 flex items-center">
+          <div className="col-span-1 flex items-center py-4 ">
             <CustomSelect
               options={statusOrders}
               value={status}
@@ -72,7 +80,7 @@ const History = ({ navigate, location }) => {
           <tr className="border bg-sky-900 text-white border-white">
             <th className="text-center py-2">#</th>
             <th className="text-center py-2">Products</th>
-            <th className="text-center py-2">Total</th>
+            <th className="text-center py-2">Price(VND)</th>
             <th className="text-center py-2">Status</th>
             <th className="text-center py-2">Created At</th>
           </tr>
@@ -115,13 +123,17 @@ const History = ({ navigate, location }) => {
                   ))}
                 </span>
               </td>
-              <td className="text-center py-2">{el.total + " $"}</td>
+              <td className="text-center py-2">{formatMoney(el.total)}</td>
               <td
                 className={`text-center py-2 ${
-                  el.status == "Succeed" ? "text-green-800" : "text-red-600"
+                  el.status === "Chờ xử lý"
+                    ? "text-gray-500"
+                    : el.status === "Đã duyệt"
+                    ? "text-green-600"
+                    : "text-red-600"
                 }`}
               >
-                {el.status === "Succeed" ? "Đã duyệt" : "Đang xử lý"}
+                {el.status}
               </td>
               <td className="text-center py-2">
                 {moment(el.createdAt)?.format("DD/MM/YYYY")}

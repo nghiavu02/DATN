@@ -51,9 +51,79 @@ const register = asyncHandler(async (req, res) => {
     });
     if (newUser) {
       const html = `
-        <h2>Register code:</h2><br />
-        <blockquote>${token}</blockquote>
-      `;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hoàn tất đăng ký Digital World</title>
+  <style>
+    /* CSS styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .header h2 {
+      color: #333;
+    }
+    .content {
+      padding: 20px;
+    }
+    .code-block {
+      background-color: #f4f4f4;
+      padding: 10px;
+      border-radius: 5px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h2>Hoàn tất đăng ký Digital World</h2>
+    </div>
+    <div class="content">
+      <h3>Xin chào,</h3>
+      <p>Cảm ơn bạn đã đăng ký tài khoản tại Digital World. Đây là mã xác nhận của bạn:</p>
+      <div class="code-block">
+        ${token}
+      </div>
+      <p>Vui lòng sử dụng mã này để hoàn tất quá trình đăng ký của bạn.</p>
+    </div>
+    <div class="footer">
+      <p>Trân trọng,<br>Đội ngũ Digital World</p>
+    </div>
+  </div>
+</html>
+`;
+
+      await sendMail({
+        email,
+        html,
+        subject: "Hoàn tất đăng ký Digital World",
+      });
+
       await sendMail({
         email,
         html,
@@ -187,12 +257,6 @@ const logout = asyncHandler(async (req, res) => {
   });
 });
 
-// Client gửi email
-// Server check email có hợp lệ ko => gửi mail + kèm theo link (password change token)
-// Client click mail => click link
-// Client gửi api kèm token
-// Check token có giống với token mà server gửi mail ko
-// Change password
 const forgotPassword = asyncHandler(async (req, res) => {
   const { email } = req.body;
   if (!email) throw new Error("Missing email");
@@ -202,9 +266,74 @@ const forgotPassword = asyncHandler(async (req, res) => {
   await user.save();
 
   const html = `
-    Xin vui lòng click vào link dưới đây để đổi mật khẩu của bạn. Link này sẽ hết hạn sau 15 phút kể từ bây giờ. 
-    <a href=${process.env.CLIENT_URL}/reset-password/${resetToken}>Click here</a>
-  `;
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reset Password</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .header h2 {
+      color: #333;
+    }
+    .content {
+      padding: 20px;
+    }
+    .reset-link {
+      display: block;
+      background-color: #007bff;
+      color: #fff;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-align: center;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+    .reset-link:hover {
+      background-color: #0056b3;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h2>Reset Password</h2>
+    </div>
+    <div class="content">
+      <p>Xin vui lòng click vào liên kết dưới đây để đổi mật khẩu của bạn. Liên kết này sẽ hết hạn sau 15 phút kể từ bây giờ.</p>
+      <a href="${process.env.CLIENT_URL}/reset-password/${resetToken}" class="reset-link">Reset Password</a>
+    </div>
+    <div class="footer">
+      <p>Trân trọng,<br>Đội ngũ Digital World</p>
+    </div>
+  </div>
+</body>
+</html>`;
+
   const data = {
     email,
     html,

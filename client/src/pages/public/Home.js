@@ -19,8 +19,8 @@ const { IoIosArrowForward } = icons;
 const Home = ({ navigate }) => {
   const { newProducts } = useSelector((state) => state.products);
   // const { categories } = useSelector((state) => state.app);
-  const [categories, setCategories] = useState([]);
   const { isLoggedIn, current } = useSelector((state) => state.user);
+  const [categories, setCategories] = useState([]);
   const fetchApi = async () => {
     const response = await apiGetCategories({
       //  limit: process.env.REACT_APP_LIMIT,
@@ -32,7 +32,7 @@ const Home = ({ navigate }) => {
   useEffect(() => {
     fetchApi();
   }, []);
-  console.log(categories);
+  // console.log(categories);
   return (
     <div>
       <div className="w-main flex mt-6">

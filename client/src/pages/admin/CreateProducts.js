@@ -80,6 +80,7 @@ const CreateProducts = () => {
           (el) => el._id === data.category
         )?.title;
       const finalPayload = { ...data, ...payload };
+      console.log(data, payload);
       const formData = new FormData();
       for (let i of Object.entries(finalPayload)) formData.append(i[0], i[1]);
       if (finalPayload.thumb) formData.append("thumb", finalPayload.thumb[0]);
@@ -90,13 +91,13 @@ const CreateProducts = () => {
       const response = await apiCreateProduct(formData);
       dispatch(showModal({ isShowModal: false, modalChildren: null }));
       if (response.success) {
-        toast.success(response.mes);
+        toast.success("Thêm sản phẩm thành công");
         reset();
         setPayload({
           thumb: "",
           image: [],
         });
-      } else toast.error(response.mes);
+      } else toast.error("Thất bại");
     }
   };
 
@@ -108,7 +109,7 @@ const CreateProducts = () => {
       <div className="p-4">
         <form onSubmit={handleSubmit(handleCreateProduct)}>
           <InputForm
-            label="Name product"
+            label="Tên sản phẩm"
             register={register}
             errors={errors}
             id="title"
@@ -120,7 +121,7 @@ const CreateProducts = () => {
           />
           <div className="w-full my-6 flex gap-4">
             <InputForm
-              label="Price"
+              label="Giá tiền"
               register={register}
               errors={errors}
               id="price"
@@ -132,7 +133,7 @@ const CreateProducts = () => {
               type="number"
             />
             <InputForm
-              label="Quantity"
+              label="Số lượng"
               register={register}
               errors={errors}
               id="quantity"
@@ -144,7 +145,7 @@ const CreateProducts = () => {
               type="number"
             />
             <InputForm
-              label="Color"
+              label="Màu sắc"
               register={register}
               errors={errors}
               id="color"
@@ -157,7 +158,7 @@ const CreateProducts = () => {
           </div>
           <div className="w-full my-6 flex gap-4">
             <Select
-              label="Category"
+              label="Danh mục"
               options={categories?.map((el) => ({
                 code: el._id,
                 value: el.title,
@@ -172,7 +173,7 @@ const CreateProducts = () => {
               fullWidth
             />
             <Select
-              label="Brand (Optional)"
+              label="Nhãn hàng"
               options={categories
                 ?.find((el) => el._id === watch("category"))
                 ?.brand?.map((el) => ({ code: el, value: el }))}
@@ -186,7 +187,7 @@ const CreateProducts = () => {
           <MarkdownEditor
             name="description"
             changeValue={changeValue}
-            label="Description"
+            label="Mô tả"
             invalidFields={invalidFields}
             setInvalidFields={setInvalidFields}
           />
@@ -255,7 +256,7 @@ const CreateProducts = () => {
             </div>
           )}
           <div className="my-6">
-            <Button type="submit">Create new product</Button>
+            <Button type="submit">Thêm mới</Button>
           </div>
         </form>
       </div>

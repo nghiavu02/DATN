@@ -21,6 +21,7 @@ const Checkout = ({ dispatch, navigate }) => {
     tong = tong + 40000;
     phi = 40000;
   }
+  console.log(currentCart);
   return (
     <div className="p-8 w-full grid grid-cols-10 h-full max-h-screen overflow-y-auto gap-6">
       {isSuccess && <Congrat />}

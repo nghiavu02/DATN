@@ -171,7 +171,15 @@ export const voteOptions = [
   },
 ];
 
-const { AiOutlineDashboard, MdGroups, TbBrandProducthunt, RiBillLine } = icons;
+const {
+  AiOutlineDashboard,
+  MdGroups,
+  TbBrandProducthunt,
+  RiBillLine,
+  FaFileInvoiceDollar,
+  FaHome,
+  FaBars,
+} = icons;
 export const adminSidebar = [
   {
     id: 1,
@@ -208,14 +216,21 @@ export const adminSidebar = [
     type: "SINGLE",
     text: "Danh mục",
     path: `/admin/manage_Categories`,
-    icon: <MdGroups size={20} />,
+    icon: <FaBars size={20} />,
   },
   {
     id: 5,
     type: "SINGLE",
     text: "Đơn hàng",
     path: `/admin/manage_order`,
-    icon: <MdGroups size={20} />,
+    icon: <FaFileInvoiceDollar size={20} />,
+  },
+  {
+    id: 6,
+    type: "SINGLE",
+    text: "Về trang chủ",
+    path: `/`,
+    icon: <FaHome size={20} />,
   },
   // {
   //   id: 4,
@@ -281,11 +296,19 @@ export const blockStatus = [
 
 export const statusOrders = [
   {
-    label: "Cancalled",
-    value: "Cancalled",
+    value: "All",
+    label: "Tất cả",
   },
   {
-    label: "Succeed",
-    value: "Succeed",
+    value: "Đã duyệt",
+    label: "Đã duyệt",
+  },
+  {
+    value: "Hủy bỏ",
+    label: "Hủy bỏ",
+  },
+  {
+    value: "Chờ xử lý",
+    label: "Chờ xử lý",
   },
 ];

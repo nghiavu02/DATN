@@ -2,6 +2,8 @@ const ProductCategory = require("../models/productCategory");
 const asyncHandler = require("express-async-handler");
 
 const createCategory = asyncHandler(async (req, res) => {
+  const image = req?.files?.image[0]?.path;
+  if (image) req.body.image = image;
   const response = await ProductCategory.create(req.body);
 
   return res.status(200).json({
@@ -33,7 +35,6 @@ const getCategories = asyncHandler(async (req, res) => {
     ];
   }
   const qr = { ...formatedQueries };
-  console.log(qr);
   let queryCommand = ProductCategory.find(qr);
 
   // Sorting

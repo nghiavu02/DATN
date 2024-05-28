@@ -14,7 +14,6 @@ import { toast } from "react-toastify";
 import clsx from "clsx";
 import Swal from "sweetalert2";
 import { chuyenDinhDangSoTien, fotmatPrice } from "ultils/helpers";
-// import OrderDetail from "./OrderDetail";
 
 const ManageOrder = () => {
   const {
@@ -54,8 +53,8 @@ const ManageOrder = () => {
     if (response.success) {
       setEditElm(null);
       render();
-      toast.success(response.mes);
-    } else toast.error(response.mes);
+      toast.success("Thành công");
+    } else toast.error("Thất bại");
   };
   const handleDeleteOrder = (orderId) => {
     Swal.fire({
@@ -67,8 +66,8 @@ const ManageOrder = () => {
         const response = await apiDeleteOrder(orderId);
         if (response.success) {
           render();
-          toast.success(response.mes);
-        } else toast.error(response.mes);
+          toast.success("Xóa đơn hàng thành công");
+        } else toast.error("Xóa thất bại");
       }
     });
   };
@@ -89,6 +88,7 @@ const ManageOrder = () => {
       }
     });
   };
+  console.log(queries);
   return (
     <div className="w-full flex flex-col gap-4 relative">
       {viewOrder && (
@@ -107,7 +107,7 @@ const ManageOrder = () => {
               value={queries.q}
               setValue={setQueries}
               style={"w500"}
-              placeholder="Tìm kiếm mã đơn hàng hoặc người mua..."
+              placeholder="Tìm kiếm mã đơn hàng hoặc trạng thái..."
               isHideLabel
             />
           </div>
@@ -130,7 +130,7 @@ const ManageOrder = () => {
                 {orders?.orders?.map((order, index) => (
                   <tr key={order?._id} className="border border-gray-500">
                     <td className="py-2 px-4">{index + 1}</td>
-                    <td className="py-2 px-4">{order?._id || "daf"}</td>
+                    <td className="py-2 px-4">{order?.idOrder || ""}</td>
                     <td className="py-2 px-4">
                       {order?.orderBy
                         ? order?.orderBy?.lastname +
@@ -142,13 +142,7 @@ const ManageOrder = () => {
                       {moment(order?.createdAt).format("DD/MM/YYYY")}
                     </td>
                     <td className="py-2 px-4">
-                      <span className="px-2">
-                        {order?.status === "Processing"
-                          ? "Chờ xử lý"
-                          : order?.status === "Succeed"
-                          ? "Đã duyệt"
-                          : "Hủy bỏ"}
-                      </span>
+                      <span className="px-2">{order?.status}</span>
                     </td>
                     <td className="py-2">
                       <span
@@ -162,14 +156,21 @@ const ManageOrder = () => {
                     <td className="py-2">
                       <div className="flex gap-2">
                         <span
-                          onClick={() =>
-                            handleUpdateStatus(
-                              order._id,
-                              "Succeed",
-                              "Bạn có chắc chắn xác nhận duyệt đơn hàng?"
-                            )
+                          onClick={
+                            order.status === "Đã duyệt"
+                              ? (e) => e.stopPropagation()
+                              : () =>
+                                  handleUpdateStatus(
+                                    order._id,
+                                    "Đã duyệt",
+                                    "Bạn có chắc chắn xác nhận duyệt đơn hàng?"
+                                  )
                           }
-                          className="bg-green-700 hover:bg-green-600 text-white font-[500] py-2 px-4 rounded cursor-pointer"
+                          className={`bg-green-700 hover:bg-green-600 text-white font-[500] py-2 px-4 rounded cursor-pointer ${
+                            order.status === "Đã duyệt"
+                              ? "cursor-not-allowed"
+                              : "cursor-pointer"
+                          }`}
                         >
                           {" "}
                           Duyệt đơn
@@ -178,7 +179,7 @@ const ManageOrder = () => {
                           onClick={() =>
                             handleUpdateStatus(
                               order._id,
-                              "Cancelled",
+                              "Hủy bỏ",
                               "Bạn có chắc chắn xác nhận hủy đơn hàng?"
                             )
                           }

@@ -1,20 +1,25 @@
-import { Button, InputForm } from 'components'
-import moment from 'moment'
-import React, { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
-import { useDispatch, useSelector } from 'react-redux'
-import avatar from 'assets/logo.png'
-import { apiUpdateCurrent } from 'apis'
-import { getCurrent } from 'store/user/asyncActions'
-import { toast } from 'react-toastify'
-import { useSearchParams } from 'react-router-dom'
-import withBaseComponent from 'hocs/withBaseComponent'
+import { Button, InputForm } from "components";
+import moment from "moment";
+import React, { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import avatar from "assets/logo.png";
+import { apiUpdateCurrent } from "apis";
+import { getCurrent } from "store/user/asyncActions";
+import { toast } from "react-toastify";
+import { useSearchParams } from "react-router-dom";
+import withBaseComponent from "hocs/withBaseComponent";
 
 const Personal = ({ navigate }) => {
-  const { register, formState: { errors, isDirty }, handleSubmit, reset } = useForm()
-  const { current } = useSelector(state => state.user)
-  const dispatch = useDispatch()
-  const [searchParams] = useSearchParams()
+  const {
+    register,
+    formState: { errors, isDirty },
+    handleSubmit,
+    reset,
+  } = useForm();
+  const { current } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const [searchParams] = useSearchParams();
   useEffect(() => {
     reset({
       firstname: current?.firstname,
@@ -23,105 +28,117 @@ const Personal = ({ navigate }) => {
       email: current?.email,
       avatar: current?.avatar,
       address: current?.address,
-    })
-  }, [current])
+    });
+  }, [current]);
 
   const handleUpdateInfor = async (data) => {
-    const formData = new FormData()
-    if (data.avatar.length > 0) formData.append('avatar', data.avatar[0])
-    delete data.avatar
-    for (let i of Object.entries(data)) formData.append(i[0], i[1])
+    const formData = new FormData();
+    if (data.avatar.length > 0) formData.append("avatar", data.avatar[0]);
+    delete data.avatar;
+    for (let i of Object.entries(data)) formData.append(i[0], i[1]);
 
-    const response = await apiUpdateCurrent(formData)
+    const response = await apiUpdateCurrent(formData);
     if (response.success) {
-      dispatch(getCurrent())
-      toast.success(response.mes)
-      if (searchParams.get('redirect')) navigate(searchParams.get('redirect'))
-    } else toast.error(response.mes)
-  }
+      dispatch(getCurrent());
+      toast.success(response.mes);
+      if (searchParams.get("redirect")) navigate(searchParams.get("redirect"));
+    } else toast.error(response.mes);
+  };
 
   return (
-    <div className='w-full relative px-4'>
-      <header className='text-3xl font-semibold py-4 border-b border-b-blue-200'>
+    <div className="w-full relative px-4">
+      <header className="text-3xl font-semibold py-4 border-b border-b-blue-200">
         Personal
       </header>
-      <form onSubmit={handleSubmit(handleUpdateInfor)} className='w-3/4 mx-auto py-8 flex flex-col gap-4'>
+      <form
+        onSubmit={handleSubmit(handleUpdateInfor)}
+        className="w-3/4 mx-auto py-8 flex flex-col gap-4"
+      >
         <InputForm
-          label='Firstname'
+          label="Firstname"
           register={register}
           errors={errors}
-          id='firstname'
+          id="firstname"
           validate={{
-            required: 'Need field'
+            required: "Need field",
           }}
         />
         <InputForm
-          label='Lastname'
+          label="Lastname"
           register={register}
           errors={errors}
-          id='lastname'
+          id="lastname"
           validate={{
-            required: 'Need field'
+            required: "Need field",
           }}
         />
         <InputForm
-          label='Email address'
+          label="Email address"
           register={register}
           errors={errors}
-          id='email'
+          id="email"
           validate={{
-            required: 'Need field',
+            required: "Need field",
             pattern: {
               value: /^[\w\-\.]+@([\w-]+\.)+[\w-]{2,}$/gm,
-              message: 'Email invalid'
-            }
+              message: "Email invalid",
+            },
           }}
         />
         <InputForm
-          label='Phone'
+          label="Phone"
           register={register}
           errors={errors}
-          id='mobile'
+          id="mobile"
           validate={{
-            required: 'Need field',
+            required: "Need field",
             pattern: {
-              value: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4}$/gm,
-              message: 'Phone invalid'
-            }
+              value:
+                /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4}$/gm,
+              message: "Phone invalid",
+            },
           }}
         />
         <InputForm
-          label='Address'
+          label="Address"
           register={register}
           errors={errors}
-          id='address'
+          id="address"
           validate={{
-            required: 'Need field',
+            required: "Need field",
           }}
         />
-        <div className='flex items-center gap-2'>
-          <span className='font-medium'>Account status:</span>
-          <span>{current?.isBlocked ? 'Blocked' : 'Actived'}</span>
+        <div className="flex items-center gap-2">
+          <span className="font-medium">Account status:</span>
+          <span>{current?.isBlocked ? "Blocked" : "Actived"}</span>
         </div>
-        <div className='flex items-center gap-2'>
-          <span className='font-medium'>Role:</span>
-          <span>{+current?.role === 1945 ? 'Admin' : 'User'}</span>
+        <div className="flex items-center gap-2">
+          <span className="font-medium">Role:</span>
+          <span>{+current?.role === 1945 ? "Admin" : "User"}</span>
         </div>
-        <div className='flex items-center gap-2'>
-          <span className='font-medium'>Created At:</span>
+        <div className="flex items-center gap-2">
+          <span className="font-medium">Created At:</span>
           <span>{moment(current?.createdAt).fromNow()}</span>
         </div>
-        <div className='flex flex-col gap-2'>
-          <span className='font-medium'>Profile image:</span>
+        <div className="flex flex-col gap-2">
+          <span className="font-medium">Profile image:</span>
           <label htmlFor="file">
-            <img src={current?.avatar || avatar} alt="avatar" className='w-20 h-20 ml-8 object-cover rounded-full' />
+            <img
+              src={current?.avatar || avatar}
+              alt="avatar"
+              className="w-20 h-20 ml-8 object-cover rounded-full"
+            />
           </label>
-          <input type="file" id='file' {...register('avatar')} hidden />
+          <input type="file" id="file" {...register("avatar")} hidden />
         </div>
-        {isDirty && <div className='w-full flex justify-end'><Button type='submit'>Update info</Button></div>}
+        {isDirty && (
+          <div className="w-full flex justify-end">
+            <Button type="submit">Update info</Button>
+          </div>
+        )}
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default withBaseComponent(Personal)
+export default withBaseComponent(Personal);

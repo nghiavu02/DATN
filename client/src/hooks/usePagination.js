@@ -9,7 +9,7 @@ const usePagination = (totalProductCount, currentPage, siblingCount = 1) => {
     if (paginationCount <= totalPaginationItem)
       return generateRange(1, paginationCount);
 
-    console.log(process.env.REACT_APP_LIMIT_PAGE);
+    // console.log(process.env.REACT_APP_LIMIT_PAGE);
     const isShowLeft = currentPage - siblingCount > 2;
     const isShowRight = currentPage + siblingCount < paginationCount - 1;
     if (isShowLeft && !isShowRight) {

@@ -23,7 +23,7 @@ const ProductInformation = ({
 
   const handleSubmitVoteOption = async ({ comment, score }) => {
     if (!comment || !pid || !score) {
-      alert("Please vote sai");
+      alert("Vui lòng điền đầy đủ thông tin");
       return;
     }
     await apiRatings({ star: score, comment, pid, updatedAt: Date.now() });
@@ -34,7 +34,7 @@ const ProductInformation = ({
   const handleVoteNow = () => {
     if (!isLoggedIn) {
       Swal.fire({
-        text: "Login to vote",
+        text: "Đăng nhập để đánh giá",
         cancelButtonText: "Cancel",
         confirmButtonText: "Go login",
         title: "Oops!",
@@ -60,7 +60,7 @@ const ProductInformation = ({
   return (
     <div>
       <div className="flex items-center gap-2 relative bottom-[-1px]">
-        {productInfoTabs.map((el) => (
+        {/* {productInfoTabs.map((el) => (
           <span
             className={`py-2 px-4 cursor-pointer ${
               activedTab === +el.id
@@ -72,13 +72,15 @@ const ProductInformation = ({
           >
             {el.name}
           </span>
-        ))}
+        ))} */}
       </div>
-      <div className="w-full border p-4">
+      {/* <div className="w-full border p-4">
         {productInfoTabs.some((el) => el.id === activedTab) &&
           productInfoTabs.find((el) => el.id === activedTab)?.content}
-      </div>
-
+      </div> */}
+      <h3 className="text-[20px] font-semibold py-[15px] border-b-2 border-main">
+        Product reviews
+      </h3>
       <div className="flex flex-col py-8 w-main">
         <div className="flex border">
           <div className="flex-4 flex-col flex items-center justify-center">

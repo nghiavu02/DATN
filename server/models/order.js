@@ -15,8 +15,8 @@ var orderSchema = new mongoose.Schema(
     ],
     status: {
       type: String,
-      default: "Processing",
-      enum: ["Cancelled", "Succeed", "Processing"],
+      default: "Chờ xử lý",
+      enum: ["Hủy bỏ", "Đã duyệt", "Chờ xử lý"],
     },
     total: Number,
     orderBy: {
@@ -24,6 +24,9 @@ var orderSchema = new mongoose.Schema(
       ref: "User",
     },
     description: {
+      type: String,
+    },
+    idOrder: {
       type: String,
     },
   },
